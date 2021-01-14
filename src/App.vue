@@ -1,25 +1,26 @@
 <template>
   <v-app>
     <TheNavbar />
-    <Login />
+    <!-- <Login /> -->
     <v-main id="scrolling-techniques-7">
-      <HelloWorld/>
+      <!-- <HelloWorld/> -->
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+// import HelloWorld from './components/HelloWorld';
 import TheNavbar from './components/layout/TheNavbar';
-import Login from './views/Login';
+// import Login from './views/Login';
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    // HelloWorld,
     TheNavbar,
-    Login
+    // Login
   },
 
   data: () => ({

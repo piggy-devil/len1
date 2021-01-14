@@ -6,6 +6,7 @@
     <v-card-text>
       <v-form>
         <v-text-field
+          id="email"
           v-model="email"
           :rules="emailRules"
           label="E-mail"
@@ -14,6 +15,7 @@
           required
         ></v-text-field>
         <v-text-field
+          id="password"
           v-model="password"
           :type="showPassword ? 'text' : 'password'"
           :rules="passwordRules"
@@ -28,12 +30,10 @@
     </v-card-text>
 
     <v-card-actions class="mb-2">
-      <v-btn block color="info">Login</v-btn>
-      <!-- <v-spacer></v-spacer>
-      <v-btn color="success">Register</v-btn> -->
+      <v-btn @click="submitForm" block color="info">Login</v-btn>
     </v-card-actions>
     <v-divider></v-divider>
-    <p class="text-center mt-3">
+    <p class="text-center">
       คุณยังไม่มีบัญชีผู้ใช้งาน ?
       <a href="/register" class="text-blue-500 no-underline hover:underline"
         >สมัครใหม่</a
@@ -56,18 +56,52 @@ export default {
         (v) => !!v || "E-mail is required",
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
+      mode: "login",
+      error: null,
     };
   },
   methods: {
-    validate() {
-      this.$refs.form.validate();
-    },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
-    },
+    async submitForm() {
+
+      const actionPayload = {
+        email: this.email,
+        password: this.password,
+      };
+
+    //   if (form.mode === "signup") {
+    //     if (form.name === "" || form.password !== form.passwordConfirm) {
+    //       form.formIsValid = false;
+    //       return;
+    //     }
+    //     actionPayload.name = form.name;
+    //     actionPayload.password_confirmation = form.passwordConfirm;
+    //   }
+
+    //   form.isLoading = true;
+
+      try {
+        if (this.mode === "login") {
+          await this.$store.dispatch("login", actionPayload);
+        } else {
+          await this.$store.dispatch("signup", actionPayload);
+          this.$router.replace("/");
+        }
+        const redirectUrl = "/";
+        this.$router.replace(redirectUrl);
+      } catch (err) {
+        this.error = err.message || "Failed to autheticate, try later.";
+      }
+      this.isLoading = false;
+    }
+    // validate() {
+    //   this.$refs.form.validate();
+    // },
+    // reset() {
+    //   this.$refs.form.reset();
+    // },
+    // resetValidation() {
+    //   this.$refs.form.resetValidation();
+    // },
   },
 };
 </script>
